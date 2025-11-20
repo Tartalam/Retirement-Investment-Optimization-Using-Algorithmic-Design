@@ -1,3 +1,8 @@
+# Author: Jahmari Harrison
+# ID: 2304204
+# Description: Created the codebase that calculates the Maxwithdrawal for retirement fund over the course of
+#              a retirment period. Ai was used to add documentations and mangae some of the exeption handling.
+
 class MaxWithdrawal:
     """
     A class to calculate the maximum safe annual withdrawal amount from retirement savings
