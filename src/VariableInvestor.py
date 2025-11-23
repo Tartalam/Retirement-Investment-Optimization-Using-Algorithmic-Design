@@ -1,11 +1,11 @@
-def variable_investor(principal, rateList):
+def variableInvestor(principal, rateList):
 
     """
     Simulates growth with variable annual interest rates.
     
     Args:
         principal (float): Starting investment value.
-        rateList (list of float): List of annual growth rates (e.g., [0.05, 0.07, -0.02] for 5%, 7%, -2%).
+        rateList (list of float): List of annual growth rates.
     
     Returns:
         float: Final accumulated balance after applying all rates.
