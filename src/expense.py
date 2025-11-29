@@ -1,28 +1,75 @@
 class RetirementSimulator:
     def __init__(self, balance, expense, rate):
-        self.initial_balance = balance
-        self.balance = balance
-        self.expense = expense
-        self.rate = rate
-        self.years = 0
+        try:
+            # Validate types
+            if not isinstance(balance, (int, float)):
+                raise TypeError("Balance must be a number.")
+            if not isinstance(expense, (int, float)):
+                raise TypeError("Expense must be a number.")
+            if not isinstance(rate, (int, float)):
+                raise TypeError("Rate must be a number.")
+
+            # Validate values
+            if balance < 0:
+                raise ValueError("Balance cannot be negative.")
+            if expense < 0:
+                raise ValueError("Expense cannot be negative.")
+            if rate < 0:
+                raise ValueError("Rate cannot be negative.")
+
+            self.initial_balance = balance
+            self.balance = balance
+            self.expense = expense
+            self.rate = rate
+            self.years = 0
+
+        except Exception as e:
+            print(f"Error during initialization: {e}")
+            raise
+
 
     def simulate(self):
-        while self.balance > 0:
-            self.balance = self.balance * (1 + self.rate) - self.expense
-            self.years += 1
-            if self.years > 200:
-                return float('inf')
-        return self.years
+        try:
+            if self.expense == 0 and self.rate >= 0:
+                return float('inf')  # Money lasts forever
+            
+            while self.balance > 0:
+                self.balance = self.balance * (1 + self.rate) - self.expense
+                self.years += 1
+
+                if self.years > 200:
+                    raise RuntimeError("Simulation exceeded 200 years—possible infinite loop.")
+            
+            return self.years
+
+        except Exception as e:
+            print(f"Simulation error: {e}")
+            return None
+
 
     def summary(self):
-        print(f"Initial Balance: ${self.initial_balance:,.2f}")
-        print(f"Annual Withdrawal: ${self.expense:,.2f}")
-        print(f"Growth Rate: {self.rate * 100:.2f}%")
-        print(f"Funds last for approximately {self.years} years.")
+        try:
+            print(f"Initial Balance: ${self.initial_balance:,.2f}")
+            print(f"Annual Withdrawal: ${self.expense:,.2f}")
+            print(f"Growth Rate: {self.rate * 100:.2f}%")
+
+            if self.years == float('inf'):
+                print("Funds last indefinitely.")
+            else:
+                print(f"Funds last for approximately {self.years} years.")
+
+        except Exception as e:
+            print(f"Error printing summary: {e}")
 
 
 # --- RUN THE SIMULATION ---
-simulator = RetirementSimulator(1_000_000, 80_000, 0.05)
-years = simulator.simulate()
-print(f"The retirement fund lasts for {years} years.")
-simulator.summary()
+try:
+    simulator = RetirementSimulator(1_000_000, 80_000, 0.05)
+    years = simulator.simulate()
+
+    if years is not None:
+        print(f"The retirement fund lasts for {years} years.")
+        simulator.summary()
+
+except Exception as e:
+    print(f"Unexpected error: {e}")
