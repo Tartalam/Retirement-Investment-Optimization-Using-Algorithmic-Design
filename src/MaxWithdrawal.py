@@ -1,29 +1,12 @@
+# Author: Jahmari Harrison
+# Date: 28-11-2025
+# Description: Generate max withdrawal amount last last over a fixed retirement period.
+#Attribution: the Documentation and exeption handling was done with the help of AI.
 class MaxWithdrawal:
-    """
-    A class to calculate the maximum safe annual withdrawal amount from retirement savings
-    using a binary search algorithm to find the optimal withdrawal rate.
-    
-    The class determines the maximum amount that can be withdrawn annually from a retirement
-    portfolio over a fixed period while ensuring the portfolio doesn't run out of money,
-    taking into account expected investment returns.
-    
-    Attributes:
-        __num_years (int): Number of years in retirement (must be positive)
-        __tolerance (float): Precision tolerance for binary search convergence (default: 0.1)
-    """
+
     
     def __init__(self, num_years, balance, rate, tolerance=0.1):
-        """
-        Initialize the MaxWithdrawal calculator with retirement parameters.
-        
-        Args:
-            num_years (int): Number of years in retirement (must be positive)
-            tolerance (float, optional): Precision tolerance for binary search. Defaults to 0.1.
-            
-        Raises:
-            ValueError: If num_years is not positive or tolerance is not positive
-            TypeError: If num_years is not an integer or tolerance is not a number
-        """
+       
         if not isinstance(num_years, int):
             raise TypeError("num_years must be an integer")
         if num_years <= 0:
@@ -50,24 +33,7 @@ class MaxWithdrawal:
         
     
     def maximum_withdrawal(self):
-        """
-        Calculate the maximum safe annual withdrawal amount.
         
-        Uses a binary search algorithm to find the maximum annual withdrawal that
-        allows the portfolio to last for the specified number of years.
-        
-        Args:
-            balance (float): Initial retirement portfolio balance (must be positive)
-            rate (float): Expected annual investment return rate as a decimal (e.g., 0.05 for 5%)
-            
-        Returns:
-            float: Maximum safe annual withdrawal amount
-            
-        Raises:
-            ValueError: If balance is not positive, rate is not valid, or calculation fails
-            TypeError: If balance or rate are not numbers
-            ZeroDivisionError: If the annuity formula calculation fails (e.g., rate = -1)
-        """
 
         try:
             # Calculate initial high bound using annuity formula
@@ -96,23 +62,7 @@ class MaxWithdrawal:
             raise ValueError(f"Withdrawal calculation failed: {str(e)}") from e
     
     def __binary_search_withdrawal(self, balance, rate, low, high, tolerance, years):
-        """
-        Recursive binary search to find the optimal withdrawal amount.
         
-        Args:
-            balance (float): Initial portfolio balance
-            rate (float): Annual investment return rate
-            low (float): Lower bound of search range
-            high (float): Upper bound of search range
-            tolerance (float): Convergence tolerance
-            years (int): Number of years
-            
-        Returns:
-            float: Optimal withdrawal amount within specified tolerance
-            
-        Raises:
-            RecursionError: If binary search fails to converge (excessive recursion)
-        """
         # Base case: search range is within tolerance
         if (high - low) <= tolerance:
             return (low + high) / 2
@@ -137,21 +87,7 @@ class MaxWithdrawal:
             return self.__binary_search_withdrawal(balance, rate, low, mid, tolerance, years)
     
     def __simulate_retirement(self, initial_balance, rate, withdrawal, years):
-        """
-        Simulate retirement withdrawals over the specified period.
-        
-        Args:
-            initial_balance (float): Starting portfolio balance
-            rate (float): Annual investment return rate
-            withdrawal (float): Annual withdrawal amount
-            years (int): Number of years to simulate
-            
-        Returns:
-            float: Final portfolio balance after all years
-            
-        Raises:
-            ValueError: If simulation produces invalid results
-        """
+       
         if not isinstance(initial_balance, (int, float)) or initial_balance < 0:
             raise ValueError("initial_balance must be a non-negative number")
         if not isinstance(withdrawal, (int, float)) or withdrawal < 0:
@@ -204,8 +140,3 @@ class MaxWithdrawal:
         return self.__rate
     
     
-    def __str__(self):
-        return f"Retirement Calculator: ${self.__balance:,.2f} for {self.__num_years} years at {self.__rate*100}%"
-    
-    def __repr__(self):
-        return f"MaxWithdrawal(num_years={self.__num_years}, balance={self.__balance}, rate={self.__rate}, tolerance={self.__tolerance})"
