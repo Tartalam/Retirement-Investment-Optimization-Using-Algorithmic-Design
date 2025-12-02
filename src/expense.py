@@ -1,10 +1,12 @@
+from Data import data 
+
 class RetirementSimulator:
-    def __init__(self, balance, expense, rate):
-        self.initial_balance = balance
-        self.balance = balance
+    def __init__(self, expense):
+        self.initial_balance = data.principal
+        self.balance = data.balance
         self.expense = expense
-        self.rate = rate
-        self.years = 0
+        self.rate = data.rate
+        self.years = data.years
 
     def simulate(self):
         while self.balance > 0:

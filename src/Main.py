@@ -2,7 +2,6 @@ from MaxWithdrawal import MaxWithdrawal
 from FixedInvestor import FixedInvestor
 from VariableInvestor import variableInvestor
 
-
 def run_max_withdrawal():
     print("\n=== Maximum Withdrawal Calculator ===")
 
@@ -42,7 +41,7 @@ def run_fixed_investor():
     print(f"You gained: ${amount_gained:,.2f}")
 
 
-def run_variableInvestor():
+def run_variable_investor():
     print("\n=== Variable Investor Function ===")
 
     principal = float(input("Enter your initial investment amount: $"))
@@ -54,7 +53,7 @@ def run_variableInvestor():
         rate = float(input(f"Year {i+1} rate: "))
         rateList.append(rate)
 
-    balance = variable_investor(principal, rateList)
+    balance = variableInvestor(principal, rateList)
     gain = balance - principal
 
     print("\n=== RESULTS ===")
