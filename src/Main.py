@@ -1,91 +1,130 @@
 from MaxWithdrawal import MaxWithdrawal
 from FixedInvestor import FixedInvestor
-from VariableInvestor import variableInvestor
+from VariableInvestor import VariableInvestor
+from RetirementSimulator import RetirementSimulator
 
+def get_input(prompt, type_func=float, min_val=None, max_val=None):
+    """Get validated input of specified type."""
+    while True:
+        try:
+            value = type_func(input(prompt))
+            
+            if min_val is not None and value < min_val:
+                print(f"Must be ≥ {min_val}")
+                continue
+            if max_val is not None and value > max_val:
+                
+                print(f"Must be ≤ {max_val}")
+                continue
+                
+            return value
+        except ValueError:
+            print("Invalid input. Try again.")
 
 def run_max_withdrawal():
     print("\n=== Maximum Withdrawal Calculator ===")
-
-    balance = float(input("Enter your retirement balance: $"))
-    rate = float(input("Enter annual investment return rate (e.g., 0.05): "))
-    years = int(input("Enter number of years in retirement: "))
-
-    calculator = MaxWithdrawal(balance=balance, rate=rate, num_years=years, tolerance=0.01)
-    max_withdrawal = calculator.maximum_withdrawal()
-
-    print("\n=== RESULTS ===")
-    print(f"Initial Balance: ${calculator.get_balance():,.2f}")
-    print(f"Annual Return Rate: {calculator.get_rate()*100:.1f}%")
-    print(f"Retirement Period: {calculator.get_num_years()} years")
-    print(f"Maximum Safe Annual Withdrawal: ${max_withdrawal:,.2f}")
-    print(f"Monthly Withdrawal: ${max_withdrawal/12:,.2f}")
-
-    total_withdrawn = max_withdrawal * calculator.get_num_years()
-    print(f"Total Withdrawn: ${total_withdrawn:,.2f}")
-
+    
+    balance = get_input("Retirement balance: $", min_val=0.01)
+    rate = get_input("Annual return rate (e.g., 0.05): ", min_val=-0.99)
+    years = get_input("Years in retirement: ", int, min_val=1)
+    
+    try:
+        calc = MaxWithdrawal(years, balance, rate, 0.01)
+        withdrawal = calc.maximum_withdrawal()
+        
+        print(f"\nResults:")
+        print(f"Annual withdrawal: ${withdrawal:,.2f}")
+        print(f"Monthly: ${withdrawal/12:,.2f}")
+        print(f"Total withdrawn: ${withdrawal * years:,.2f}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 def run_fixed_investor():
-    print("\n=== Fixed Investor Function ===")
+    print("\n=== Fixed Investment Calculator ===")
+    
+    principal = get_input("Initial investment: $", min_val=0.01)
+    years = get_input("Years to invest: ", int, min_val=1)
+    rate = get_input("Annual rate (%): ") / 100
+    
+    try:
+        balance = FixedInvestor.fixed_investor(principal, years, rate)
+        print(f"\nResults:")
+        print(f"Final balance: ${balance:,.2f}")
+        print(f"Total gain: ${balance - principal:,.2f}")
+    except Exception as e:
+        print(f"Error: {e}")
 
-    principal = float(input("Enter your initial investment amount: $"))
-    years = int(input("Enter the number of years until retirement: "))
-    rate = float(input("Enter the interest rate (percent): "))
+def run_variable_investor():
+    print("\n=== Variable Investment ===")
+    
+    principal = get_input("Initial: $", min_val=0.01)
+    years = get_input("Years: ", int, min_val=1)
+    
+    # Collect rates efficiently
+    rates = [get_input(f"Yr{i+1}%: ") / 100 for i in range(years)]
+    
+    try:
+        balance = VariableInvestor.calculate(principal, rates)
+        print(f"\nFinal: ${balance:,.2f}")
+        print(f"Gain: ${balance - principal:,.2f}")
+        
+        if years > 1:
+            print(f"\nYearly:")
+            current = principal
+            for i, r in enumerate(rates, 1):
+                current *= (1 + r)
+                print(f"  {i}: ${current:,.2f} ({r*100:+.1f}%)")
+                
+    except Exception as e:
+        print(f"Error: {e}")
 
-    balance = FixedInvestor.fixed_investor(principal, rate / 100, years)
-    amount_gained = balance - principal
-
-    print("\n=== RESULTS ===")
-    print(f"Initial investment: ${principal:,.2f}")
-    print(f"Years until retirement: {years}")
-    print(f"Fixed interest rate: {rate}%")
-    print(f"Final Balance: ${balance:,.2f}")
-    print(f"You gained: ${amount_gained:,.2f}")
-
-
-def run_variableInvestor():
-    print("\n=== Variable Investor Function ===")
-
-    principal = float(input("Enter your initial investment amount: $"))
-    n = int(input("Enter the number of years: "))
-
-    rateList = []
-    print("\nEnter each year's rate (e.g., 0.05 for 5%):")
-    for i in range(n):
-        rate = float(input(f"Year {i+1} rate: "))
-        rateList.append(rate)
-
-    balance = variable_investor(principal, rateList)
-    gain = balance - principal
-
-    print("\n=== RESULTS ===")
-    print(f"Initial investment: ${principal:,.2f}")
-    print(f"Final balance: ${balance:,.2f}")
-    print(f"Total gain: ${gain:,.2f}")
-
+def run_retirement_simulator():
+    print("\n=== Retirement Simulator ===")
+    
+    balance = get_input("Retirement balance: $", min_val=0.01)
+    expense = get_input("Annual withdrawal: $", min_val=0.01)
+    rate = get_input("Growth rate (%): ") / 100
+    
+    try:
+        sim = RetirementSimulator(balance, expense, rate)
+        years = sim.simulate()
+        
+        print(f"\nResults:")
+        print(f"Funds last: {years} years")
+        print(f"Withdrawal rate: {(expense/balance)*100:.1f}%")
+    except Exception as e:
+        print(f"Error: {e}")
 
 def main():
-    print("=== Retirement Calculator ===")
-    print("1. Maximum Withdrawal Calculator")
-    print("2. Fixed Investment Calculator")
-    print("3. Variable Investment Calculator")
-
-    choice = input("Choose an option (1, 2 or 3): ")
-
-    try:
+    while True:
+        print("\n" + "="*40)
+        print("RETIREMENT CALCULATOR")
+        print("="*40)
+        print("1. Safe Withdrawal Amount")
+        print("2. Fixed Investment Growth")
+        print("3. Variable Investment Growth")
+        print("4. Retirement Fund Duration")
+        print("5. Exit")
+        print("-"*40)
+        
+        choice = input("Choose (1-5): ").strip()
+        
         if choice == "1":
             run_max_withdrawal()
         elif choice == "2":
             run_fixed_investor()
         elif choice == "3":
             run_variable_investor()
+        elif choice == "4":
+            run_retirement_simulator()
+        elif choice == "5":
+            print("\nGoodbye!")
+            break
         else:
-            print("Invalid option selected.")
-
-    except ValueError:
-        print("Error: Invalid numeric input.")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
-
+            print("Invalid choice.")
+        
+        if choice != "5":
+            input("\nPress Enter to continue...")
 
 if __name__ == "__main__":
     main()

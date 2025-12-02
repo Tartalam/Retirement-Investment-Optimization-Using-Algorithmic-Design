@@ -1,26 +1,17 @@
-def variableInvestor(principal, rateList):
-
-    """
-    Simulates growth with variable annual interest rates.
+class VariableInvestor:
+    """Utility class for variable rate calculations."""
     
-    Args:
-        principal (float): Starting investment value.
-        rateList (list of float): List of annual growth rates.
-    
-    Returns:
-        float: Final accumulated balance after applying all rates.
-    """
-    
-    if principal <= 0:
-        raise ValueError("Principal must be positive.")
-    if not rateList:
-        return principal
-
-    balance = principal
-    for r in rateList:
-        if r <= -1:
-            raise ValueError("Interest rate <= -1 causes total loss.")
-        balance *= (1 + r)
-    return balance
-
+    @staticmethod
+    def calculate(principal, rate_list):
+        """Main calculation method."""
+        if principal <= 0:
+            raise ValueError("Principal must be positive")
+        
+        balance = principal
+        for rate in rate_list:
+            if rate <= -1:
+                raise ValueError(f"Rate {rate} would cause total loss")
+            balance *= (1 + rate)
+        
+        return balance
 
