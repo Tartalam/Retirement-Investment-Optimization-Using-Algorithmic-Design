@@ -2,7 +2,6 @@
 # Date: 28-11-2025
 # Description: Generate max withdrawal amount last last over a fixed retirement period.
 #Attribution: the Documentation and exeption handling was done with the help of AI.
-from Data import data
 class MaxWithdrawal:
 
     
@@ -27,10 +26,10 @@ class MaxWithdrawal:
             raise ValueError("rate must be greater than -1 (100% loss)")
         
             
-        self.__num_years = data.years 
+        self.__num_years = num_years
         self.__tolerance = tolerance
-        self.__balance = data.balance
-        self.__rate = data.rate
+        self.__balance = balance
+        self.__rate = rate
         
     
     def maximum_withdrawal(self):
