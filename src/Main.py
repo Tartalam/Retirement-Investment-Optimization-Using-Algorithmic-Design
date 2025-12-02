@@ -109,19 +109,20 @@ def main():
         
         choice = input("Choose (1-5): ").strip()
         
-        if choice == "1":
-            run_max_withdrawal()
-        elif choice == "2":
-            run_fixed_investor()
-        elif choice == "3":
-            run_variable_investor()
-        elif choice == "4":
-            run_retirement_simulator()
-        elif choice == "5":
-            print("\nGoodbye!")
-            break
-        else:
-            print("Invalid choice.")
+        match choice:
+            case "1":
+                run_max_withdrawal()
+            case "2":
+                run_fixed_investor()
+            case "3":
+                run_variable_investor()
+            case "4":
+                run_retirement_simulator()
+            case "5":
+                print("\nGoodbye!")
+                break
+            case _:
+                print("Invalid choice. Please enter a number between 1-5.")
         
         if choice != "5":
             input("\nPress Enter to continue...")
