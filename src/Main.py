@@ -1,3 +1,10 @@
+#Auhtor: Jahmari Harrison
+#Date: 2-12-2025
+#ID: 2304204
+#Description: Client menu to navigate the different finacial functions.
+#Atrributions: AI was used to provide a more effiecient menu client. reducing lines and increasing 
+#               efficiency.
+
 from MaxWithdrawal import MaxWithdrawal
 from FixedInvestor import FixedInvestor
 from VariableInvestor import VariableInvestor
