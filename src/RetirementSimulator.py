@@ -1,3 +1,16 @@
+# ---------------------------------------------------------------
+# Author: Abigail Bembridge (2305624)
+# Description: This program simulates how long a retirement fund 
+#              will last using yearly compound growth and fixed 
+#              annual expenses. It models the balance over time 
+#              and determines the number of years before depletion.
+# Attributions:
+#   AI assistance  was used to help to help make the code  more
+# menu-driven client, reducing the amount of code required and 
+#   improving overall readability and structure.
+# ---------------------------------------------------------------
+
+
 class RetirementSimulator:
     def __init__(self, balance, expense, rate):
         try:
